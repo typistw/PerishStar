@@ -1,4 +1,5 @@
 #include "MenuLayer.h"
+#include "GameScene.h"
 
 Scene* MenuLayer::createScene()
 {
@@ -17,15 +18,21 @@ bool MenuLayer::init()
 
 	Size visibleSize=Director::getInstance()->getVisibleSize();
 
+	//读取游戏的图片资源
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("m_background.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("m_menu.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("m_word.plist");
+
 	//初始化背景
-	Sprite* background=Sprite::create("bg_menuscene.jpg");
+	Sprite* background=Sprite::createWithSpriteFrameName("bg_menuscene.jpg");
 	background->setPosition(Point(visibleSize.width/2,visibleSize.height/2));
 	this->addChild(background,-1);
 
 	//菜单初始化
-	MenuItemImage* startBtn=MenuItemImage::create(
-		"menu_start.png",
-		"menu_start.png",
+	Sprite* startSprite=Sprite::createWithSpriteFrameName("menu_start.png");
+	MenuItemSprite* startBtn=MenuItemSprite::create(
+		startSprite,
+		startSprite,
 		CC_CALLBACK_0(MenuLayer::startGame,this));
 	startBtn->setPosition(visibleSize.width/2,visibleSize.height/2);
 	Menu* menu=Menu::create(startBtn,NULL);
@@ -37,6 +44,7 @@ bool MenuLayer::init()
 
 void MenuLayer::startGame()
 {
-
+	CCLOG("START");
+	Director::getInstance()->replaceScene(GameScene::create());
 }
 
